@@ -20,7 +20,13 @@
                             Danh mục chủ đề
                           </a>
                           <ul class="dropdown-menu">
-                              <%# Có bao nhiêu chủ đề đẩy binding phần này làm sau %>
+                            <% chude.forEach(item => { %>
+                                <li>
+                                    <a href="#" class="dropdown-item">
+                                        <%= item  %>
+                                    </a>
+                                </li>
+                            <% }) %>
                           </ul>
                     </li>
                     <li class="nav-item">
