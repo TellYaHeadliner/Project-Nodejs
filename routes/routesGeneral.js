@@ -45,7 +45,7 @@ routerGeneral.get('/', async (req,res) => {
     try {
         const header = await getHeader();
         const footer = await getFooter();
-        res.render('clients/main', { result: header, chude: footer, header: '../general/header', footer: '../general/footer'  });
+        res.render('general/main', { result: header, chude: footer, header: '../clients/header', footer: '../general/footer' });
     }
     catch (error) {
         console.error(error);
