@@ -1,8 +1,9 @@
 const express = require('express');
 const path = require('path');
 const dotenv = require('dotenv');
-const Client = require('./controllers/controllerClient');
-const Admin = require('./controllers/controllerAdmin');
+const Client = require('./routes/routesClients');
+const Admin = require('./routes/routesAdmin');
+const General = require('./routes/routesGeneral')
 const connnectDB = require('./connectDB');
 
 // GỌI PORT
@@ -13,7 +14,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-app.get('/', Client.getHandlerByClient);
+app.use('/', General.routerGeneral);
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running at port ${process.env.PORT} `);
