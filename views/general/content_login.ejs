@@ -1,0 +1,58 @@
+<main style="display: flex;align-items: center; justify-content: center;flex: 1;">
+    <% if (typeof alertMessage !== 'undefined') { %>
+        <script>
+            alert('<%= alertMessage %>');
+        </script>
+    <% } %>
+    <div >
+        <%if(typeof errLogin != 'undefined'){%>
+            <p class="errLogin">Tài khoản hoặc mật khẩu không chính xác!</p>
+        <%};%>
+        <form class="formLogin" method="post">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email"
+                    <%if(typeof email != 'undefined'){%>
+                        value=<%= email%>
+                    <%};%>
+                >
+            </div>
+            <div class="mb-3" style="margin-bottom: 0 !important">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" name="pass"
+                    <%if(typeof pass != 'undefined'){%>
+                        value=<%= pass%>
+                    <%};%>
+                >
+            </div>
+            <a class="dktk" href="/signup" >Đăng ký tài khoản.</a><br>
+            <button type="submit" class="btn btn-primary" style="margin-top: 16px !important">Login</button>
+        </form>
+    </div>
+</main>
+<style type="text/css">
+    body{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 100%;
+    }
+    html{
+        height: 100%;
+    }
+    .formLogin{
+        width: 20%;
+        min-width: 350px;
+        border: 1px solid rgb(192, 192, 192) !important;
+        padding: 50px;
+    }
+    .errLogin{
+        color: red;
+    }
+</style>
+<script>
+    window.onload = function() {
+        // Thay đổi URL của trang không làm tải lại trang khi đăng ký hòa tất
+        window.history.pushState({}, '', '/login');
+    };
+</script>
