@@ -2,6 +2,7 @@ const express = require('express');
 const connection = require('../connectDB');
 const session = require('express-session');
 
+
 const routerGeneral = express.Router();
 
 async function getFooter(){
@@ -41,6 +42,7 @@ async function getHeader(){
         });
     })
 }
+
 async function checkSignup(email){
     const query = "SELECT * FROM taiKhoan WHERE email = '" + email +"'";
     return new Promise((resolve, reject) => {
@@ -95,11 +97,13 @@ routerGeneral.get('/', async (req,res) => {
             res.render('general/main', {header:'../admin/header', footer:'../general/footer',chude:header,result: footer, uname: req.session.user.tenTaiKhoan})
         else if(req.session.user.vaiTro == 2)
             res.render('general/main', {header:'../clients/header', footer:'../general/footer',chude:header,result: footer, uname: req.session.user.tenTaiKhoan})
+        res.render('general/main', { result: footer, chude: header, header: '../clients/header', footer: '../general/footer' });
     }
     catch (error) {
         console.error(error);
     }
 })
+
 routerGeneral.get('/signup', async (req, res)=> {
     const footer = await getFooter();
     res.render('general/main', { result: footer,content: '../general/content_signup',footer:'../general/footer',header:'../general/header_signup' });
