@@ -1,0 +1,48 @@
+<header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a href="/" class="navbar-brand">Trang chủ</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Tin tức</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " aria-current="page" href="#">Liên hệ</a>
+                    </li>
+                </ul>
+                <ul class="nav align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Danh mục chủ đề
+                        </a>
+                        <ul class="dropdown-menu">
+                            <% chude.forEach(item => { %>
+                                <li>
+                                    <a href="#" class="dropdown-item">
+                                        <%= item  %>
+                                    </a>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <form class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Tìm</button>
+                        </form>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/login" class="btn btn-md btn-primary mx-1">
+                            <i class="bi bi-person"></i>
+                            Đăng nhập <!-- Tạm vậy cho tới khi binding dữ liệu-->
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
