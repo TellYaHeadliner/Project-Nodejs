@@ -21,5 +21,7 @@ connection.connect((err) => {
     }
 })
 
+
+// Vì connection đã export nên không cần require mysql hay ghi lại địa chỉ liên kết chỉ cần gọi connection từ connectDB 
 module.exports = connection;
 

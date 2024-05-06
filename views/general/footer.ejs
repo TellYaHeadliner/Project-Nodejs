@@ -1,0 +1,37 @@
+<footer class="bg-secondary text-light pt-4 pt-lg-6">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-md-6">
+                <ul class="nav flex-column">
+                    <li class="nav-item mx-3">
+                        <h4>Thông tin liên lạc</h4> 
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-light">Địa chỉ liên hệ: <%= result[0].diaChiLienHe  %></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-light"><i class="bi bi-envelope"></i> Email: <%= result[0].email %> </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<%= result[0].facebook %>" class="nav-link text-light"><i class="bi bi-facebook"></i> Facebook: <%= result[0].facebook %></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<%= result[0].youtube %>" class="nav-link text-light"><i class="bi bi-youtube"></i> Youtube: <%= result[0].youtube %></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <form>
+                    <div class="form-group">
+                        <label for="">Đăng ký email để nhận thông tin mới</label>
+                        <input type="email" class="form-control mt-2" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập email của bạn">
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2">Xác nhận</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container d-flex justify-content-center text-center text-lg-start py-2">
+        <p class="mb-0"><%= result[0].thongTinBanQuyen %></p>
+    </div>
+</footer>
