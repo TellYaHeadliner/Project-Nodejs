@@ -145,12 +145,6 @@ routerGeneral.get("/", async (req, res) => {
         result: footer,
         uname: req.session.user.tenTaiKhoan,
       });
-    res.render("general/main", {
-      result: footer,
-      chude: header,
-      header: "../clients/header",
-      footer: "../general/footer",
-    });
   } catch (error) {
     console.error(error);
   }
