@@ -57,6 +57,4 @@ CREATE TABLE emailSubcribe(
 
 INSERT INTO footerlienhe VALUES ('5 Đ. Huỳnh Thúc Kháng, Bến Nghé, Quận 1, Thành phố Hồ Chí Minh', 'abc@gmail.com', 'https://www.facebook.com/caothang.edu.vn', 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', '0306221133-0306221136-0306221199');
 
-INSERT INTO news.chude
-(maChuDe, chuDe, trangThai)
 
