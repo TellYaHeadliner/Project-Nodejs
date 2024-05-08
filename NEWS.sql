@@ -13,7 +13,7 @@ CREATE TABLE footerLIENHE(
 CREATE TABLE BAIVIET(
     maBaiViet int AUTO_INCREMENT PRIMARY KEY,
 	tieuDeBaiViet varchar (50),
-	noiDungTomTat varchar (100),
+	noiDungTomTat text,
 	noiDungBaiViet longtext,
 	hinhAnhDaiDien blob,
 	ngayDang datetime DEFAULT CURRENT_TIMESTAMP(),
@@ -33,6 +33,7 @@ CREATE TABLE formLienHe(
 	email char (100),
 	soDienThoai char (10),
 	tieuDe varchar (100),
+	noiDung text,
 	ngayUpload datetime DEFAULT CURRENT_TIMESTAMP(),
 	status bit
 );
