@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path');
-const {getBlog} = require('../middleware/getBlog')
-const getFooter = require('../middleware/getFooter')
-const getHeader = require('../middleware/getHeader');
+const {getBlog} = require('../getBlog')
+const getFooter = require('../getFooter')
+const getHeader = require('../getHeader');
 const { he } = require('date-fns/locale');
 
 

@@ -14,7 +14,7 @@ async function getBlog(){
                     tieuDeBaiViet: row.tieuDeBaiViet,
                     noiDungTomTat: row.noiDungTomTat,
                     hinhAnhDaiDien: row.hinhAnhDaiDien,
-                    ngayDang: format(new Date(row.ngayDang), 'dd/MM/yyyy HH:mm:ss'),
+                    ngayDang: format(new Date(row.ngayDang), 'dd/MM/yyyy'),
                 }))
                 res(blogs);
             }
@@ -87,4 +87,25 @@ async function findBlog(keyword){
     })
 }
 
-module.exports = { getBlog, getBlogDetail, getBlogs, findBlog }
+async function getBlogByMCD(maChuDe){
+    const query = "SELECT maBaiViet ,tieuDeBaiViet , noiDungTomTat , hinhAnhDaiDien,  ngayDang FROM baiviet WHERE maChuDe = ?"
+    return new Promise((res,rej) => {
+        connection.query(query, [maChuDe], (err,rows) => {
+            if (err){
+                throw err;
+            }
+            else {
+                const blogs = rows.map( row => ({
+                    maBaiViet: row.maBaiViet,
+                    tieuDeBaiViet: row.tieuDeBaiViet,
+                    noiDungTomTat: row.noiDungTomTat,
+                    hinhAnhDaiDien: row.hinhAnhDaiDien,
+                    ngayDang: format(new Date(row.ngayDang), 'dd/MM/yyyy HH:mm:ss'),
+                }))
+                res(blogs);
+            }
+        })
+    })
+}
+
+module.exports = { getBlog, getBlogDetail, getBlogs, findBlog, getBlogByMCD }

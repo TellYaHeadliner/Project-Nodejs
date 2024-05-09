@@ -1,6 +1,6 @@
 const express = require('express');
-const getFooter = require('../middleware/getFooter')
-const getHeader = require('../middleware/getHeader')
+const getFooter = require('../getFooter')
+const getHeader = require('../getHeader')
 
 
 const routerAdmin = express();

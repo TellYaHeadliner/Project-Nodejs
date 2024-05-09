@@ -9,8 +9,7 @@ async function getHeader(){
             } 
             else 
             {
-                const result = rows.map(row => row.chuDe);
-                resolve(result);
+                resolve(rows)
             }
         });
     })

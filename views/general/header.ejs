@@ -11,26 +11,21 @@
                         <a class="nav-link active" aria-current="page" href="#">Tin tức</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="#">Liên hệ</a>
+                        <button type="button" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Liên hệ
+                        </button>
                     </li>
                 </ul>
                 <ul class="nav align-items-center">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-secondary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Danh mục chủ đề
-                        </a>
-                        <ul class="dropdown-menu">
-                            <% chuDe.forEach(element => { %>
-                                <li>
-                                    <a href="#" class="dropdown-item">
-                                        <%= element %>
-                                    </a>
-                                </li>
-                            <% }) %>
-                        </ul>
-                    </li>
                     <li class="nav-item">
-                        <form class="d-flex" role="search" action="" method="GET">
+                        <form class="d-flex" role="search" action="/search" method="GET">
+                            <label for="form-select"></label>
+                            <select class="form-select" id="validationCustom04" name="maChuDe">
+                                <option selected value="*">Chọn tất cả</option>
+                                <% chuDe.forEach(element => { %>
+                                    <option value="<%= element.maChuDe %>"> <%= element.chuDe %></option>
+                                <% }); %>
+                            </select>
                             <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Search" name="search">
                             <button class="btn btn-outline-success" type="submit">Tìm</button>
                         </form>
@@ -62,3 +57,34 @@
         </div>
     </nav>
 </header>
+
+
+  
+  <!-- Modal -->
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Contact Information</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Display contact information from footerLIENHE table -->
+          <h6>Footer Contact Information:</h6>
+          <p><strong>Address:</strong> <%= result[0].diaChiLienHe  %></p>
+          <p><strong>Email:</strong>  <%= result[0].email %> </p>
+          <p><strong>Facebook:</strong> <%= result[0].facebook %></p>
+          <p><strong>Youtube:</strong> <%= result[0].youtube %></p>
+          <p><strong>Copyright:</strong> <%= result[0].thongTinBanQuyen %></p>
+          
+          <!-- Display contact information from formLienHe table -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
