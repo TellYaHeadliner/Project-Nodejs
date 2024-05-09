@@ -1,6 +1,7 @@
 const express = require("express");
 const connection = require("../connectDB");
 const session = require("express-session");
+const {format}=require("date-fns");
 
 const routerGeneral = express.Router();
 async function getFooter() {
@@ -117,7 +118,55 @@ async function insertTaiKhoan(email, pass, uname) {
     return false;
   });
 }
+async function selectByIDBaiViet(idBaiViet){
+  const query ="select * from baiviet where maBaiViet='"+idBaiViet+"'";
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
+}
+async function selectByMaChuDe(maChuDe){
+  const query ="select * from baiviet where maChuDe = '"+maChuDe+"'";
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(row);
+      }
+    });
+  });
+}
 
+async function insertFormLienHe(email, uname, tieuDe, noiDung, soDienThoai){
+  const query = "INSERT INTO formLienHe (email, hoTen, tieuDe, noiDung, soDienThoai,status) VALUES ('" +
+  email +
+  "','" +
+  uname +
+  "','" +
+  tieuDe +
+  "','" +
+  noiDung +
+  "','" +
+  soDienThoai +
+  "',1)";
+  return new Promise((resolve, reject) => {
+    connection.query(query, (err, row) => {
+      if (err) {
+        reject(err);
+      } else {
+        reject(true);
+      }
+    });
+  }).catch((err) => {
+  return false;
+});
+};
 routerGeneral.get("/", async (req, res) => {
   try {
     const header = await getHeader();
@@ -254,6 +303,71 @@ routerGeneral.get("/logout", async (req, res) => {
   });
 });
 
+routerGeneral.get("/lienhe", async (req, res) => {
+  if(req.session.user===undefined) {
+    res.render("general/popupLienHe");
+  }
+  else{
+    res.render("general/popupLienHe",{
+      email:req.session.user.email, 
+      uname:req.session.user.tenTaiKhoan
+    })
+  }
+});
+routerGeneral.post("/lienhe", async (req, res) => {
+  a = await insertFormLienHe(req.body.email,req.body.hoTen,req.body.tieuDe,req.body.noiDung,req.body.soDienThoai)
+  res.render("general/popupLienHe",{
+    close:true
+  })
+});
+routerGeneral.get("/xembaiviet/:id",async function(req,res){
+  const header = await getHeader();
+  const footer = await getFooter();
+  const id= req.params.id;
+  const baiviet=await selectByIDBaiViet(id);
+  const baiVietLienQuan= await selectByMaChuDe(baiviet[0].maChuDe);
+  const ran =baiVietLienQuan.sort(function(){return 0.5 - Math.random()} );
+  if(baiviet.length==0){
+    res.redirect('/');
+  }
+  else if(req.session.user!=undefined ){
+    res.render('general/main',{
+      result: footer,
+      chude: header,
+      header:"../clients/header.ejs",
+      content:"../general/xembaiviet.ejs",
+      footer: "../general/footer",
+      uname: req.session.user.tenTaiKhoan,
+      nonTimKiem:true,
+      baiviet:baiviet[0],
+      ngayDang: format(new Date(baiviet[0].ngayDang), 'dd/MM/yyyy'),
+      lienquan: ran,
+      ngayDang1: format(new Date(ran[0].ngayDang), 'dd/MM/yyyy'),
+      ngayDang2: format(new Date(ran[1].ngayDang), 'dd/MM/yyyy'),
+      ngayDang3: format(new Date(ran[2].ngayDang), 'dd/MM/yyyy'),
+      
+    });
+  }
+  else {
+    console.log(baiviet[0]);
+    res.render('general/main',{
+      result: footer,
+      chude: header,
+      header:"../general/header_signup.ejs",
+      content:"../general/xembaiviet.ejs",
+      footer: "../general/footer",
+      nonTimKiem:true,
+      baiviet:baiviet[0],
+      ngayDang: format(new Date(baiviet[0].ngayDang), 'dd/MM/yyyy'),
+      lienquan: ran,
+      ngayDang1: format(new Date(ran[0].ngayDang), 'dd/MM/yyyy'),
+      ngayDang2: format(new Date(ran[1].ngayDang), 'dd/MM/yyyy'),
+      ngayDang3: format(new Date(ran[2].ngayDang), 'dd/MM/yyyy'),
+      ran:ran
+
+    });
+  }
+});
 const postHandlerByGeneral = (req, res) => {};
 const putHandlerByGeneral = (req, res) => {};
 const deleteHandlerByGeneral = (req, res) => {};

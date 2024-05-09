@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>Liên Hệ</title>
+</head>
+<body style="display:flex; justify-content: center">
+    <div style="width: 90%">
+    <h1>Gửi yêu cầu liên hệ</h1>
+    <form method="post" >
+        <div class="mb-3">
+          <label for="inputTen" class="form-label">Tên: </label>
+          <input name="hoTen" required type="text" class="form-control" id="inputTen"
+            <%if(typeof uname!= "undefined"){%>
+                value=<%=uname%> readonly
+            <%};%>
+            >
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Email:</label>
+            <input name="email" required type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+            <%if(typeof email!= "undefined"){%>
+                value=<%=email%> readonly
+            <%};%>
+            >
+        </div>
+        <div class="mb-3">
+            <label for="inputSDT" class="form-label">Số Điện Thoại</label>
+            <input name="soDienThoai" required type="tel" pattern="[0-9]{10}" title="Please enter a 10-digit phone number" class="form-control" id="inputSDT" >
+        </div>
+        <div class="mb-3">
+            <label for="inputTieuDe" class="form-label">Tiêu Đề</label>
+            <input name="tieuDe" required type="text" class="form-control" id="inputTieuDe" >
+          </div>
+        <div class="mb-3">
+            <label for="inputNoiDung" class="form-label">Nội Dung</label>
+            <input name="noiDung" required type="text" class="form-control" id="inputNoiDung" >
+        </div>
+        <button type="submit" class="btn btn-primary">Xác Nhận</button>
+      </form>
+    </div>
+</body>
+</html>
+<script>
+    <%if(typeof close !="undefined"){%>
+        window.addEventListener('load', function() {
+            window.close();
+            alert('gửi liên hệthành công');
+        });        
+    <%};%>
+</script>
