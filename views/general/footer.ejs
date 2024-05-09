@@ -7,7 +7,7 @@
                         <h4>Thông tin liên lạc</h4> 
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link text-light">Địa chỉ liên hệ: <%= result[0].diaChiLienHe  %></a>
+                        <a href="#" class="nav-link text-light">Địa chỉ liên hệ: <%= result[0].diaChiLienHe %></a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link text-light"><i class="bi bi-envelope"></i> Email: <%= result[0].email %> </a>
@@ -20,18 +20,18 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-md-3">
-                <form>
+            <!-- <div class="col-md-3">
+                <form action="/sendEmail" method="POST">
                     <div class="form-group">
-                        <label for="">Đăng ký email để nhận thông tin mới</label>
-                        <input type="email" class="form-control mt-2" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập email của bạn">
+                        <label for="email">Đăng ký email để nhận thông tin mới</label>
+                        <input type="email" class="form-control mt-2" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập email của bạn" name="email">
                     </div>
                     <button type="submit" class="btn btn-primary mt-2">Xác nhận</button>
                 </form>
-            </div>
+            </div> -->
         </div>
     </div>
     <div class="container d-flex justify-content-center text-center text-lg-start py-2">
-        <p class="mb-0"><%= result[0].thongTinBanQuyen %></p>
+        <p class="mb-0"><%= result.thongTinBanQuyen %></p>
     </div>
 </footer>

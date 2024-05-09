@@ -1,17 +1,23 @@
 const express = require('express');
-const mysql = require('mysql');
 const path = require('path');
+const {getBlog} = require('../getBlog')
+const getFooter = require('../getFooter')
+const getHeader = require('../getHeader');
+const { he } = require('date-fns/locale');
 
-const app = express();
 
-app.use(express.static(path.join(__dirname, "public")));
+const routerClient = express();
 
+routerClient.use(express.static(path.join(__dirname, "public")));
 
-const getHandlerByClient = (req, res) => {
-    res.render("clients/main")
-};
-const postHandlerByClient = (req, res) => {};
-const putHandlerByClient = (req, res) => {};
-const deleteHandlerByClient = (req, res) => {};
+routerClient.get('/client', async (req, res) => {
+    const header = await getHeader();
+    const blogs =  await getBlog();
+    const footer = await getFooter();
+    // @ts-ignore
+    const user = req.session.user;
+    res.render('general/general', {result: footer, chuDe: header, blogs : blogs ,user: user, header: '../general/header', footer: '../general/footer', main: '../general/main'});
 
-module.exports = {  getHandlerByClient, postHandlerByClient, putHandlerByClient , deleteHandlerByClient };
+})
+
+module.exports = { routerClient };

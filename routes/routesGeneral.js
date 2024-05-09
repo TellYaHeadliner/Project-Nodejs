@@ -1,179 +1,155 @@
 const express = require('express');
-const connection = require('../connectDB');
-const session = require('express-session');
+const connection = require('../connectDB')
+const getHeader = require('../getHeader')
+const getFooter = require('../getFooter')
+const { getBlog, getBlogDetail, getBlogs, findBlog, getBlogByMCD } = require('../getBlog')
+const jwt = require('jsonwebtoken')
+const dotenv = require('dotenv')
 
-
+dotenv.config();
 const routerGeneral = express.Router();
-
-async function getFooter(){
-    const query = "SELECT * FROM footerlienhe";
-    return new Promise((resolve, reject) => {
-        connection.query(query, (err, rows) => {
-            if (err) {
-                reject(err);
-            } 
-            else 
-            {
-                const result = rows.map(row => ({
-                    diaChiLienHe: row.diaChiLienHe,
-                    email: row.email,
-                    facebook: row.facebook,
-                    youtube: row.youtube,
-                    thongTinBanQuyen: row.thongTinBanQuyen
-                }));
-                resolve(result);
-            }
-        });
-    })
-}
-
-async function getHeader(){
-    const query = "SELECT * FROM chude WHERE trangThai = true";
-    return new Promise((resolve, reject) => {
-        connection.query(query, (err, rows) => {
-            if (err) {
-                reject(err);
-            } 
-            else 
-            {
-                const result = rows.map(row => row.chuDe);
-                resolve(result);
-            }
-        });
-    })
-}
-
-async function checkSignup(email){
-    const query = "SELECT * FROM taiKhoan WHERE email = '" + email +"'";
-    return new Promise((resolve, reject) => {
-        connection.query(query, (err, row) =>{
-            if (err) {reject(err);}
-            else{
-                if(row.length==0)
-                    resolve(true);
-                else
-                    resolve(false);
-            }
-        })
-    });
-}
-async function checkLogin(email,pass){
-    const query = "SELECT * FROM taiKhoan WHERE email = '" + email +"' AND matKhau = '" + pass +"' and trangThai = 1";
-    return new Promise((resolve, reject) => {
-        connection.query(query, (err, row) =>{
-            if (err) {reject(err);}
-            else{
-                if(row.length==0)
-                    resolve(0);
-                else
-                    resolve(row);
-            }
-        })
-    });
-}
-
-async function insertTaiKhoan(email,pass,uname){
-    const query = "INSERT INTO taiKhoan (email, tenTaiKhoan, matKhau, vaiTro, trangThai) VALUES ('"+email+"','"+uname+"','"+pass+"','2','1')";
-    return new Promise((resolve, reject) => {
-        connection.query(query, (err, row)=>{
-            if(err) {reject(err);}
-            else{
-                reject(true);
-            }
-        })
-    })
-    .catch((err) => {
-        return false;
-    })
-}
 
 routerGeneral.get('/', async (req,res) => {
     try {
-        const header = await getHeader();
-        const footer = await getFooter();
-        if(req.session.user == undefined)
-            res.render('general/main', { result: footer, chude: header, header: '../general/header', footer: '../general/footer' });
-        else if(req.session.user.vaiTro == 1)
-            res.render('general/main', {header:'../admin/header', footer:'../general/footer',chude:header,result: footer, uname: req.session.user.tenTaiKhoan})
-        else if(req.session.user.vaiTro == 2)
-            res.render('general/main', {header:'../clients/header', footer:'../general/footer',chude:header,result: footer, uname: req.session.user.tenTaiKhoan})
-        res.render('general/main', { result: footer, chude: header, header: '../clients/header', footer: '../general/footer' });
+        req.session.user = null;
+        const user = req.session.user;
+        const header = await getHeader()
+        const blogs = await getBlog()
+        const footer = await getFooter()
+        res.render('general/general', {result: footer, chuDe: header, blogs : blogs ,user: user, header: '../general/header', footer: '../general/footer', content: '../general/content'});
     }
     catch (error) {
         console.error(error);
     }
 })
 
-routerGeneral.get('/signup', async (req, res)=> {
-    const footer = await getFooter();
-    res.render('general/main', { result: footer,content: '../general/content_signup',footer:'../general/footer',header:'../general/header_signup' });
-});
-routerGeneral.post('/signup', async (req, res)=> {
-    const footer = await getFooter();
-    var errInput = false
-    var errSignup = "Chưa nhập: ";
-    console.log(req.body.email)
-    console.log(checkLogin(req.body.email, req.session.pass));
-    if(await checkSignup(req.body.email) == false) {
-        errSignup = "Email này đã được đăng ký trước đó!";
-        errInput = true;
-    }else {
-        if(req.body.email.trim() == ""){
-            errSignup += "email, ";
-            errInput = true;
-        }
-        if(req.body.uname.trim() == ""){
-            errSignup += "username, ";
-            errInput = true;
-        }
-        if(req.body.pass.trim() == ""){
-            errSignup += "password, ";
-            errInput = true;
-        }
-        errSignup = errSignup.slice(0,-2);
-        errSignup +=".";
+// routerGeneral.get('/login', async (req,res) => {
+//     res.render('general/content_login');
+// })
+
+// routerGeneral.post('/login', async (req,res) => {
+//     const { email , password } = req.body;
+//     try {
+//     const query = "SELECT tenTaiKhoan, vaiTro FROM taiKhoan WHERE email = ? AND matKhau = ?"
+//     connection.query(query, [email, password], (error, result) => {
+//         if (result == 0){
+//             return res.status(404).json({message : "Tài khoản của bạn đã sai email hoặc mật khẩu"});
+//         }
+
+//         const user = result[0];
+
+//         const token = jwt.sign({ email: user.email, role: user.vaiTro }, "VLK99", { expiresIn: "1h" }); // Đôi lúc tôi cũng không nodejs của tôi nó bị gì :)))
+//         res.cookie("token", token, {httpOnly: true});
+
+//         // 1 là admin, 2 là client
+//         switch (user.vaiTro){
+//             case 1:
+//                 // @ts-ignore
+//                 req.session.user = user.tenTaiKhoan;
+//                 return res.redirect('/client');
+//             case 2:
+//                 req.session.user = user.tenTaiKhoan;
+//                 return res.redirect('/client')
+//                 break;
+//             default:
+//                 return res.status(403).json({message: "Vai trò không hợp lệ"});
+//         }
+//     }) 
+//     } catch (error) {
+//         console.error(error)
+//         return res.status(500).json({message: "Lỗi server"})
+//     }
+// })
+
+// routerGeneral.get('/logout', async (req,res) => {
+//     try {
+//         if (req.session){
+//             req.session.destroy((err) => {
+//                 if (err){
+//                     throw err;
+//                 }
+//                 else {
+//                     res.redirect('/');
+//                 }
+//             })
+//         }
+//         else {
+//             res.redirect('/');
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({message: "Lỗi server"})
+//     }
+// })
+
+// routerGeneral.get('/signin', async (req,res) => {
+//     res.render('general/content_signin')
+// })
+
+// routerGeneral.post('/signin', async (req,res) => {
+//     const { email, tenNguoiDung, password } = req.body;
+//     try {
+//         const query = "INSERT TAIKHOAN VALUES (?,?,?,'2',1)";
+//         connection.query(query, [email, tenNguoiDung, password], (error, result) => {
+//             if (error){
+//                 throw error;
+//                 return res.status(500).json({message: "Đã xảy ra lỗi khi đăng ký tài khoản"})
+//             }
+//             else {
+//                 res.redirect('/')
+//             }
+//         })
+//     } catch (error) {
+//         console.error(error)
+//         res.status(500).json({message: "Lỗi server"})
+//     }
+// })
+
+routerGeneral.get('/xembaiviet/:id', async(req,res) => {
+    const { id } = req.params;
+    try {
+        const blog = await getBlogDetail(id);
+        res.json(blog);
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message: "Lỗi server"})
     }
-    while(true) {
-        if(errInput){
-            res.render('general/main', { result: footer,content: '../general/content_signup',footer:'../general/footer',header:'../general/header_signup',errSignup: errSignup,email: req.body.email,uname:req.body.uname,pass:req.body.pass});
-            break;
-        }else if(!await insertTaiKhoan(req.body.email,req.body.pass,req.body.uname)){
-            res.render('general/main', { result: footer,content: '../general/content_login',footer:'../general/footer',header:'../general/header_login',alertMessage:"Đăng ký tài khoản thành công",email: req.body.email,pass: req.body.pass})
-            break;
-        }else{
-            errInput = true;
-            errSignup = "Đã có lỗi xảy ra vui lòng thử lại sau!";
-        }
-    }
-});
-routerGeneral.get('/login', async (req,res) => {
-    const footer = await getFooter();
-    res.render('general/main', { result: footer,content: '../general/content_login',footer:'../general/footer',header:'../general/header_login' });
 })
-routerGeneral.post('/login', async (req,res) => {
-    const login = await checkLogin(req.body.email, req.body.pass);
+
+routerGeneral.get('/pages/', async(req,res) => {
+    let limit = parseInt(req.query.limit) || 10;
+    try {
+        const blog = await getBlogs(limit);
+        req.session.user = null;
+        const user = req.session.user;
+        const header = await getHeader()
+        const footer = await getFooter()
+        res.render('general/general', {result: footer, chuDe: header, blogs : blog ,user: user, header: '../general/header', footer: '../general/footer', content: '../general/content'});
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message: "Lỗi server"})
+    }
+})
+
+
+routerGeneral.get('/search', async (req, res) => {
+    let search = req.query.search;
+    let maChuDe = req.query.maChuDe;
+    if (!search && !maChuDe){
+        var blog = await getBlog();
+    }
+    if (search){
+        var blog = await findBlog(search); // var có khả năng chạy từ local sang global 
+    }
+    else if (maChuDe) {
+        var blog = await getBlogByMCD(maChuDe)
+    }
+
+    req.session.user = null;
+    const user = req.session.user;
     const header = await getHeader();
     const footer = await getFooter();
-    if(login == 0)
-        res.render('general/main', { result: footer,content: '../general/content_login',footer:'../general/footer',header:'../general/header_login',errLogin: 1,email: req.body.email,pass: req.body.pass});
-    else{
-        req.session.user = login[0];
-        res.redirect("/");
-    }
+    res.render('general/general', { result: footer, chuDe: header, blogs: blog, user: user, header: '../general/header', footer: '../general/footer', content: '../general/content' });
 });
-routerGeneral.get('/logout', async (req,res) => {
-    req.session.user = null;
-    req.session.destroy((err)=>{
-        if(err){
-            console.err(err);
-            return;
-        }
-        res.redirect('/');
-    });
-});
-
-const postHandlerByGeneral = (req, res) => {};
-const putHandlerByGeneral = (req, res) => {};
-const deleteHandlerByGeneral = (req, res) => {};
 
 module.exports = { routerGeneral };

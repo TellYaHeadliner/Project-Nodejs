@@ -3,6 +3,11 @@
     <% blogs.forEach(blog => { %>
     <div class="row mb-3 align-items-center">
       <div class="col-md-3">
+        <img src="<%= blog.hinhAnhDaiDien %>" class="img-fluid" alt="">
+      </div>
+      <div class="col-md-9">
+        <div class="blog-info">
+          <h5 class="blog-title"><a href="/xembaiviet/<%= blog.maBaiViet %>" class="text-dark"><%= blog.tieuDeBaiViet %></a></h5>
         <img src="images/images.jpg" class="img-fluid" alt="">
       </div>
       <div class="col-md-9">
@@ -15,4 +20,19 @@
     </div>
     <% }) %>
   </div>
+
+
+
+  <div class="text-center">
+    <nav aria-label="Navigation">
+      <ul class="pagination justify-content-center">
+        <% for( let i = 1; i < 10; i++ ) { %>
+          <li class="page-item">
+            <a class="page-link" href="?limit=<%= i * 10 %>" aria-label="Hiển thị 10 bài viết"><%= i  %></a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</div>
 </main>

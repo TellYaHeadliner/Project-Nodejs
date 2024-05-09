@@ -1,17 +1,20 @@
 <main class="d-flex align-items-center justify-content-center vh-100 vw-100 text-light">
-    <div class="formBox p-5" style="width: 500px;" >
-        <h1 class="text-center">Đăng nhập</h1>
+    <div class="formBox p-5" style="width: 500px;">
+        <h1 class="text-center">Đăng kí</h1>
         <form class="formLogin" method="post">
             <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Email address</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" required>
             </div>
             <div class="mb-3" style="margin-bottom: 0 !important">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <label for="tenNguoiDung" class="form-label">Tên người dùng</label>
+                <input type="text" class="form-control" name="tenNguoiDung" required>
+            </div>
+            <div class="mb-3" style="margin-bottom: 0 !important">
+                <label for="password" class="form-label">Mật khẩu</label>
                 <input type="password" class="form-control" id="exampleInputPassword1" name="password" required>
             </div>
-            <a class="signup"href="/signin" >Đăng ký tài khoản.</a><br>
-            <button type="submit" class="btn btn-primary" style="margin-top: 16px !important">Login</button>
+            <button type="submit" class="btn btn-primary" style="margin-top: 16px !important">Đăng ký</button>
         </form>
     </div>
 </main>
